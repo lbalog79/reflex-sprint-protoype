@@ -1,0 +1,1 @@
+Output is in `dist/`. Upload the contents of `dist/` to any static host (Sharing Platform, Azure Static Web Apps, GitHub Pages, etc.). ## Tech React 18 + TypeScript + Vite + Tailwind + React Router. No backend - all state is in browser localStorage.
