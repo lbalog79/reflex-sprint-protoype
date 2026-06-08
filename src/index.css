@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #12243F; --coral: #FF5A3C; --amber: #F4A93C;
+  --violet: #6C5CE0; --teal: #17B0A6; --pink: #E04668; --blue: #3A7BD5;
+}
+html, body, #root { height: 100%; }
+body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: #f7f8fb; color: var(--navy); margin: 0; }
