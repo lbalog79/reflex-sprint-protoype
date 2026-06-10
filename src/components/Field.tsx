@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, memo, useCallback, useEffect, useRef, useState } from "react";
 
 type Props = {
   label: string;
@@ -22,7 +22,7 @@ function FieldInner({ label, value, onCommit, placeholder, multiline, rows = 3, 
     }
   }, [value]);
 
-  const onChange = useCallback((e: any) => setDraft(e.target.value), []);
+  const onChange = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDraft(e.target.value), []);
   const onBlur = useCallback(() => {
     last.current = draft;
     onCommit(draft);
