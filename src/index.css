@@ -3,8 +3,40 @@
 @tailwind utilities;
 
 :root {
-  --navy: #12243F; --coral: #FF5A3C; --amber: #F4A93C;
-  --violet: #6C5CE0; --teal: #17B0A6; --pink: #E04668; --blue: #3A7BD5;
+  /* Colors */
+  --navy: #12243F;
+  --coral: #FF5A3C;
+  --amber: #F4A93C;
+  --violet: #6C5CE0;
+  --teal: #17B0A6;
+  --pink: #E04668;
+  --blue: #3A7BD5;
+  
+  /* Typography */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
-html, body, #root { height: 100%; }
-body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: #f7f8fb; color: var(--navy); margin: 0; }
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: #f7f8fb;
+  color: var(--navy);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
