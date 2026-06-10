@@ -1,12 +1,26 @@
 {
   "name": "reflex-sprint-prototype",
+  "description": "A Reflex sprint prototype application built with React, TypeScript, and Tailwind CSS",
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "author": "lbalog79",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lbalog79/reflex-sprint-protoype"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext ts,tsx",
+    "format": "prettier --write src"
   },
   "dependencies": {
     "lucide-react": "^0.441.0",
@@ -19,7 +33,11 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
+    "eslint": "^9.0.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "postcss": "^8.4.45",
+    "prettier": "^3.2.0",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.5.3",
     "vite": "^5.4.6"
