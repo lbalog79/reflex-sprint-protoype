@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta name="description" content="Reflex Sprint - A collaborative sprint planning and tracking application" />
     <meta name="theme-color" content="#ffffff" />
     
@@ -10,29 +11,45 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Reflex Sprint" />
     <meta property="og:description" content="Reflex Sprint - A collaborative sprint planning and tracking application" />
-    <!-- Update og:image and og:url with your actual values -->
-    <meta property="og:image" content="/og-image.png" />
-    <meta property="og:url" content="https://your-domain.com" />
+    <meta property="og:image" content="https://lbalog79.github.io/reflex-sprint-protoype/og-image.png" />
+    <meta property="og:url" content="https://lbalog79.github.io/reflex-sprint-protoype/" />
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Reflex Sprint" />
     <meta name="twitter:description" content="Reflex Sprint - A collaborative sprint planning and tracking application" />
-    <meta name="twitter:image" content="/og-image.png" />
+    <meta name="twitter:image" content="https://lbalog79.github.io/reflex-sprint-protoype/og-image.png" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://lbalog79.github.io/reflex-sprint-protoype/" />
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/reflex-sprint-protoype/favicon.svg" />
+    <link rel="apple-touch-icon" href="/reflex-sprint-protoype/apple-touch-icon.png" />
     
-    <!-- Preconnect for performance (add external domains if needed) -->
+    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Preload critical script -->
+    <link rel="preload" href="/reflex-sprint-protoype/src/main.tsx" as="script" type="module" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Reflex Sprint",
+      "description": "A collaborative sprint planning and tracking application",
+      "url": "https://lbalog79.github.io/reflex-sprint-protoype/"
+    }
+    </script>
     
     <title>Reflex Sprint</title>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/reflex-sprint-protoype/src/main.tsx"></script>
     <noscript>
       <p style="padding: 1rem; text-align: center; font-family: system-ui, -apple-system, sans-serif;">
         This application requires JavaScript to be enabled. Please enable JavaScript in your browser settings.
