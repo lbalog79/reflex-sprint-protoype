@@ -1,25 +1,39 @@
 import { Sprint, WEEKS } from "./store";
 
+// Constants for tag values
+const TAGS = { WIN: "Win", FRICTION: "Friction", DECISION: "Decision" } as const;
+const CUSTOM_OPTION_ID = "DesignYourOwn";
+const EMPTY_INDICATOR = "—";
+
+/**
+ * Get the activity description for a given week.
+ */
+function getWeekActivity(week: Sprint['weeks'][1 | 2 | 3 | 4] | undefined, weekIndex: number): string {
+  if (!week) return EMPTY_INDICATOR;
+  if (week.optionId === CUSTOM_OPTION_ID)
+    return `${week.customTitle || "(custom)"} — ${week.customBlurb || ""}`;
+  const meta = WEEKS[weekIndex].options.find((o) => o.id === week.optionId);
+  return meta?.name || week.optionId;
+}
+
+/**
+ * Format a date range for a given week.
+ */
+function formatWeekDates(startDate: string | undefined, n: 1 | 2 | 3 | 4): string {
+  if (!startDate) return "";
+  const start = new Date(startDate + "T00:00:00");
+  if (isNaN(start.getTime())) return "";
+
+  const a = new Date(start);
+  a.setDate(a.getDate() + 7 * (n - 1));
+  const b = new Date(a);
+  b.setDate(b.getDate() + 6);
+
+  const fmt = (d: Date) => d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return `${fmt(a)} – ${fmt(b)}`;
+}
+
 export function planText(s: Sprint): string {
-  const weekActivity = (n: 1 | 2 | 3 | 4) => {
-    const c = s.weeks[n];
-    if (!c) return "—";
-    if (c.optionId === "DesignYourOwn") return `${c.customTitle || "(custom)"} — ${c.customBlurb || ""}`;
-    const meta = WEEKS[n - 1].options.find((o) => o.id === c.optionId);
-    return meta ? meta.name : c.optionId;
-  };
-
-  const weekDates = (n: 1 | 2 | 3 | 4) => {
-    if (!s.startDate) return "";
-    const start = new Date(s.startDate + "T00:00:00");
-    const a = new Date(start);
-    a.setDate(a.getDate() + 7 * (n - 1));
-    const b = new Date(a);
-    b.setDate(b.getDate() + 6);
-    const fmt = (d: Date) => d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-    return `${fmt(a)} – ${fmt(b)}`;
-  };
-
   const lines = [
     "REFLEX SPRINT — 30-Day Agentic Adoption Sprint Plan",
     "=".repeat(52),
@@ -39,13 +53,11 @@ export function planText(s: Sprint): string {
     "WEEKLY PLAN",
   ];
 
-  for (let n = 1 as 1 | 2 | 3 | 4; n <= 4; n++) {
+  for (const n of [1, 2, 3, 4] as const) {
     lines.push("");
-    lines.push(`Week ${n} — ${WEEKS[n - 1].label} (${weekDates(n)})`);
+    lines.push(`Week ${n} — ${WEEKS[n - 1].label} (${formatWeekDates(s.startDate, n)})`);
     lines.push(`  Goal: ${WEEKS[n - 1].goal}`);
-    lines.push(`  Activity: ${weekActivity(n)}`);
-    n = (n + 1) as 1 | 2 | 3 | 4;
-    n = (n - 1) as 1 | 2 | 3 | 4;
+    lines.push(`  Activity: ${getWeekActivity(s.weeks[n], n - 1)}`);
   }
 
   lines.push("");
@@ -55,9 +67,9 @@ export function planText(s: Sprint): string {
 }
 
 export function evidencePackText(s: Sprint): string {
-  const wins = s.tracker.filter((t) => t.tag === "Win").length;
-  const fric = s.tracker.filter((t) => t.tag === "Friction").length;
-  const dec = s.tracker.filter((t) => t.tag === "Decision").length;
+  const wins = s.tracker.filter((t) => t.tag === TAGS.WIN).length;
+  const fric = s.tracker.filter((t) => t.tag === TAGS.FRICTION).length;
+  const dec = s.tracker.filter((t) => t.tag === TAGS.DECISION).length;
 
   const lines = [
     "REFLEX SPRINT — LEADER EVIDENCE PACK",
@@ -72,13 +84,8 @@ export function evidencePackText(s: Sprint): string {
     "WEEK BY WEEK",
   ];
 
-  for (let n = 1; n <= 4; n++) {
-    const c = s.weeks[n as 1 | 2 | 3 | 4];
-    const activity = c
-      ? c.optionId === "DesignYourOwn"
-        ? c.customTitle || "(custom)"
-        : WEEKS[n - 1].options.find((o) => o.id === c.optionId)?.name || c.optionId
-      : "—";
+  for (const n of [1, 2, 3, 4] as const) {
+    const activity = getWeekActivity(s.weeks[n], n - 1);
     lines.push("");
     lines.push(`Week ${n} — ${WEEKS[n - 1].label} / ${activity}`);
     s.tracker
@@ -95,8 +102,8 @@ export function evidencePackText(s: Sprint): string {
   if (s.retro.strongerReflex || s.retro.weakerReflex) {
     lines.push("");
     lines.push("RETRO");
-    lines.push(`  Reflex grown stronger: ${s.retro.strongerReflex || "—"}`);
-    lines.push(`  Reflex still weak (next sprint focus): ${s.retro.weakerReflex || "—"}`);
+    lines.push(`  Reflex grown stronger: ${s.retro.strongerReflex || EMPTY_INDICATOR}`);
+    lines.push(`  Reflex still weak (next sprint focus): ${s.retro.weakerReflex || EMPTY_INDICATOR}`);
     if (s.retro.notes) lines.push(`  Notes: ${s.retro.notes}`);
   }
 
@@ -114,13 +121,22 @@ export function openEvidencePdf(s: Sprint) {
 function openPdfText(text: string) {
   const w = window.open("", "_blank");
   if (!w) return;
-  const safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  w.document.write(
-    `<title>Reflex Sprint</title><pre style="font-family:Segoe UI,sans-serif;padding:32px;white-space:pre-wrap;font-size:13px;line-height:1.5">${safe}</pre>`
-  );
-  w.document.close();
+
+  const pre = document.createElement("pre");
+  pre.style.fontFamily = "Segoe UI, sans-serif";
+  pre.style.padding = "32px";
+  pre.style.whiteSpace = "pre-wrap";
+  pre.style.fontSize = "13px";
+  pre.style.lineHeight = "1.5";
+  pre.textContent = text;
+
+  w.document.title = "Reflex Sprint";
+  w.document.body.appendChild(pre);
   w.focus();
-  setTimeout(() => w.print(), 300);
+
+  setTimeout(() => {
+    if (w) w.print();
+  }, 300);
 }
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -132,6 +148,8 @@ const icsDT = (d: Date) =>
 export function downloadIcs(s: Sprint) {
   if (!s.startDate) return;
   const start = new Date(s.startDate + "T00:00:00Z");
+  if (isNaN(start.getTime())) return;
+
   let events = "";
 
   WEEKS.forEach((wk) => {
@@ -141,7 +159,7 @@ export function downloadIcs(s: Sprint) {
     b.setUTCDate(b.getUTCDate() + 7);
     const c = s.weeks[wk.n];
     const title = c
-      ? c.optionId === "DesignYourOwn"
+      ? c.optionId === CUSTOM_OPTION_ID
         ? c.customTitle || "Custom activity"
         : wk.options.find((o) => o.id === c.optionId)?.name || "TBD"
       : "TBD";
